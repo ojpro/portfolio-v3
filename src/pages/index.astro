@@ -2,6 +2,7 @@
 import Base from "@/layouts/Base.astro";
 import Button from "@/components/starwind/button/Button.astro";
 import Navbar from "@/components/home/Navbar.astro";
+import loadingImage from "/public/images/loading.webp";
 ---
 
 <Base bodyClass="relative">
@@ -12,7 +13,7 @@ import Navbar from "@/components/home/Navbar.astro";
             class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center"
         >
             <img
-                src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWUxcTB3aWk1cnZvOTNmcTQzamZhNjFtbnE1bDYxamdqbGV2cnJhayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/bGgsc5mWoryfgKBx1u/giphy.gif"
+                src={loadingImage.src}
                 alt="I am working on this page"
                 class="rounded-full w-xs"
             />
