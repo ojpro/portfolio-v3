@@ -2,7 +2,8 @@
 import Base from "@/layouts/Base.astro";
 import Button from "@/components/starwind/button/Button.astro";
 import Navbar from "@/components/home/Navbar.astro";
-import loadingImage from "/public/images/loading.webp";
+import loadingImage from "@/assets/images/loading.webp";
+import { Image } from "astro:assets";
 ---
 
 <Base bodyClass="relative">
@@ -12,8 +13,8 @@ import loadingImage from "/public/images/loading.webp";
         <div
             class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center"
         >
-            <img
-                src={loadingImage.src}
+            <Image
+                src={loadingImage}
                 alt="I am working on this page"
                 class="rounded-full w-xs"
             />
