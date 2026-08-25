@@ -1,0 +1,25 @@
+---
+import { cn } from "@/utils/utils";
+
+interface Props {
+    color?: "yellow" | "blue" | "green" | "red";
+}
+
+const highlightColors = {
+    yellow: "bg-yellow-100 dark:bg-yellow-900/40 text-yellow-900 dark:text-yellow-100",
+    blue: "bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100",
+    green: "bg-green-100 dark:bg-green-900/40 text-green-900 dark:text-green-100",
+    red: "bg-red-100 dark:bg-red-900/40 text-red-900 dark:text-red-100",
+};
+
+const { color = "yellow" } = Astro.props;
+---
+
+<code
+    class={cn(
+        "px-1.5 py-0.5 rounded-md font-mono text-sm",
+        highlightColors[color],
+    )}
+>
+    <slot />
+</code>

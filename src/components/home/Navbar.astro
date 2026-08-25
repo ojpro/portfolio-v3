@@ -1,0 +1,62 @@
+---
+interface Props {
+    hidden?: boolean;
+}
+
+const { hidden = false } = Astro.props;
+---
+
+<nav
+    class:list={[
+        "navbar w-[40vw] bg-white h-12 absolute top-4 left-1/2 z-20 rounded-full border",
+        hidden && "opacity-0 pointer-events-none",
+    ]}
+    style={`transform: translateX(-50%)${hidden ? " translateY(-2rem) scale(0.9)" : ""};`}
+>
+    <!-- <div class="flex flex-row justify-around items-center h-full w-full rounded-full gap-8"> -->
+    <ul class="flex flex-row justify-evenly items-center h-full">
+        <li class="me-8 ms-2">
+            <a href="/"
+                ><span class="text-[1.3em] font-bold"
+                    >ojpro<span class="text-accent">.</span></span
+                ></a
+            >
+        </li>
+        <li>
+            <a
+                href="/"
+                class="hover:text-black text-gray-600 font-medium border border-transparent hover:border-gray-200 px-4 py-1.5 rounded-full hover:bg-gray-50 transform-border delay-150"
+                ><span>Home</span></a
+            >
+        </li>
+        <li>
+            <a
+                href="#"
+                class="hover:text-black text-gray-600 font-medium border border-transparent hover:border-gray-200 px-4 py-1.5 rounded-full hover:bg-gray-50 transform-border delay-150"
+                ><span>About</span></a
+            >
+        </li>
+        <li>
+            <a
+                href="/blog"
+                class="hover:text-black text-gray-600 font-medium border border-transparent hover:border-gray-200 px-4 py-1.5 rounded-full hover:bg-gray-50 transform-border delay-150"
+                ><span>Blog</span></a
+            >
+        </li>
+        <li>
+            <a
+                href="#"
+                class="hover:text-black text-gray-600 font-medium border border-transparent hover:border-gray-200 px-4 py-1.5 rounded-full hover:bg-gray-50 transform-border delay-150"
+                ><span>Projects</span></a
+            >
+        </li>
+        <li>
+            <a
+                href="#"
+                class="hover:text-black text-gray-600 font-medium border border-transparent hover:border-gray-200 px-4 py-1.5 rounded-full hover:bg-gray-50 transform-border delay-150"
+                ><span>Contact</span></a
+            >
+        </li>
+    </ul>
+    <!-- </div> -->
+</nav>

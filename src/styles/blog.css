@@ -1,0 +1,114 @@
+@reference "tailwindcss";
+
+code {
+    counter-reset: line;
+}
+
+/* Apply line numbers only when showLineNumbers is specified: */
+code[data-line-numbers] > [data-line]::before {
+    counter-increment: line;
+    content: counter(line);
+    @apply text-gray-500 text-right mr-6 w-4 inline-block;
+}
+
+.prose {
+    @apply text-gray-900 dark:text-gray-100;
+}
+
+.prose code {
+    @apply text-gray-900 dark:text-gray-100 px-1 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800;
+}
+
+.prose pre {
+    @apply bg-gray-900 dark:bg-gray-950;
+}
+
+.prose pre code {
+    @apply text-gray-100 dark:text-gray-100 p-0;
+    border: initial;
+    background: none;
+}
+
+.prose img {
+    @apply m-0;
+}
+
+.prose blockquote p {
+    @apply m-0;
+}
+
+.prose a {
+    @apply transition-colors;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+    @apply scroll-m-20;
+}
+
+.prose .anchor {
+    @apply absolute invisible no-underline;
+    margin-left: -1em;
+    padding-right: 0.5em;
+    cursor: pointer;
+}
+
+.prose .anchor:after {
+    @apply text-gray-300 dark:text-gray-700;
+    content: "#";
+}
+
+.prose *:hover > .anchor {
+    @apply visible;
+}
+
+.prose pre [data-line] {
+    @apply px-4;
+}
+
+.prose pre [data-line-numbers] {
+    counter-reset: line;
+}
+
+.prose pre [data-line-numbers] > [data-line]::before {
+    counter-increment: line;
+    content: counter(line);
+    @apply inline-block w-4 mr-4 text-gray-500;
+}
+
+.prose pre [data-line-numbers-max-digits="2"] > [data-line]::before {
+    @apply w-8;
+}
+
+.prose pre [data-line-numbers-max-digits="3"] > [data-line]::before {
+    @apply w-12;
+}
+
+.prose pre .line--highlighted {
+    @apply bg-gray-800/50;
+}
+
+.prose pre .word--highlighted {
+    @apply bg-gray-800/50 rounded;
+}
+
+[dir="rtl"] .prose {
+    @apply text-right;
+}
+
+[dir="rtl"] .prose h1,
+[dir="rtl"] .prose h2,
+[dir="rtl"] .prose h3,
+[dir="rtl"] .prose h4 {
+    @apply text-right;
+}
+
+[dir="rtl"] .prose blockquote {
+    @apply border-r-4 border-l-0 pr-6 pl-0;
+}
+
+[dir="rtl"] .prose ul,
+[dir="rtl"] .prose ol {
+    @apply pr-6 pl-0;
+}

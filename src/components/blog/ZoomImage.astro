@@ -1,0 +1,78 @@
+---
+interface Props {
+    src: string;
+    alt: string;
+    width?: number;
+    height?: number;
+    caption?: string;
+}
+
+const { src, alt, width = 800, height = 400, caption } = Astro.props;
+---
+
+<div class="not-prose zoom-image-wrapper">
+    <figure class="my-8">
+        <div
+            class="zoom-image-trigger relative overflow-hidden rounded-lg cursor-zoom-in"
+        >
+            <img
+                src={src}
+                alt={alt}
+                width={width}
+                height={height}
+                class="zoom-image-el rounded-lg transition-transform duration-300 w-full hover:scale-105"
+                loading="eager"
+            />
+        </div>
+        {
+            caption && (
+                <figcaption class="mt-2 text-center text-sm text-gray-500 dark:text-gray-400">
+                    {caption}
+                </figcaption>
+            )
+        }
+    </figure>
+
+    <div
+        class="zoom-overlay fixed inset-0 z-50 flex items-center justify-center bg-gray-900/90 p-8 opacity-0 scale-95 pointer-events-none transition-all duration-300 ease-out"
+        aria-hidden="true"
+    >
+        <img
+            src={src}
+            alt={alt}
+            class="max-h-full max-w-full w-auto h-auto rounded-lg"
+        />
+    </div>
+</div>
+
+<script>
+    const OVERLAY_BASE =
+        "zoom-overlay fixed inset-0 z-50 flex items-center justify-center bg-gray-900/90 p-8 transition-all duration-300 ease-out";
+    const OVERLAY_OPEN = `${OVERLAY_BASE} opacity-100 scale-100 pointer-events-auto cursor-zoom-out`;
+    const OVERLAY_CLOSED = `${OVERLAY_BASE} opacity-0 scale-95 pointer-events-none`;
+
+    document
+        .querySelectorAll<HTMLElement>(".zoom-image-wrapper")
+        .forEach((wrapper) => {
+            if (wrapper.dataset.bound) return;
+            wrapper.dataset.bound = "true";
+
+            const trigger = wrapper.querySelector<HTMLElement>(
+                ".zoom-image-trigger",
+            );
+            const overlay = wrapper.querySelector<HTMLElement>(".zoom-overlay");
+            if (!trigger || !overlay) return;
+
+            const setZoomed = (zoomed: boolean) => {
+                overlay.className = zoomed ? OVERLAY_OPEN : OVERLAY_CLOSED;
+                document.body.classList.toggle("overflow-hidden", zoomed);
+            };
+
+            trigger.addEventListener("click", () => setZoomed(true));
+            overlay.addEventListener("click", () => setZoomed(false));
+
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") setZoomed(false);
+            });
+        });
+</script>

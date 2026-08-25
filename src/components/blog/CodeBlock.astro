@@ -1,0 +1,187 @@
+---
+import { cn } from "@/utils/utils";
+
+interface Props {
+    class?: string;
+    filename?: string;
+    showLineNumbers?: boolean;
+    isTerminal?: boolean;
+    language?: string;
+}
+
+const {
+    class: className,
+    filename,
+    showLineNumbers,
+    isTerminal,
+    language,
+} = Astro.props;
+---
+
+<div class="relative my-6 group">
+    <div
+        class={cn(
+            "flex items-center justify-between",
+            "bg-gray-800/95 rounded-t-lg border-b border-gray-700",
+            "px-4 py-2 text-sm",
+        )}
+    >
+        <div class="flex items-center gap-3">
+            <div class="flex gap-1.5">
+                <div
+                    class="w-3 h-3 rounded-full bg-red-500/90 hover:bg-red-600 transition-colors"
+                >
+                </div>
+                <div
+                    class="w-3 h-3 rounded-full bg-yellow-500/90 hover:bg-yellow-600 transition-colors"
+                >
+                </div>
+                <div
+                    class="w-3 h-3 rounded-full bg-green-500/90 hover:bg-green-600 transition-colors"
+                >
+                </div>
+            </div>
+
+            {
+                language && (
+                    <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-700 text-gray-300">
+                        {language}
+                    </span>
+                )
+            }
+
+            {
+                (filename || isTerminal) && (
+                    <div class="flex items-center gap-2 pl-2 font-mono text-xs text-gray-400">
+                        {isTerminal && (
+                            <svg
+                                class="w-4 h-4"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <polyline points="4 17 10 11 4 5" />
+                                <line x1="12" y1="19" x2="20" y2="19" />
+                            </svg>
+                        )}
+                        <span>{filename || "Terminal"}</span>
+                    </div>
+                )
+            }
+        </div>
+
+        <button
+            type="button"
+            class="copy-code-btn flex items-center gap-1.5 px-2 py-1 rounded-md transition-all duration-200 bg-gray-700/50 hover:bg-gray-700/75 text-gray-400 hover:text-gray-300"
+        >
+            <svg
+                class="copy-icon w-3.5 h-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                ></path>
+            </svg>
+            <svg
+                class="check-icon w-3.5 h-3.5 hidden"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span class="copy-label text-xs">Copy</span>
+        </button>
+    </div>
+
+    <pre
+        class={cn(
+            "code-block-pre overflow-x-auto bg-gray-900/95 py-4 rounded-b-lg",
+            "border-l border-r border-b border-gray-800",
+            "scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent",
+            "shadow-lg shadow-gray-950/10 px-4",
+            className,
+        )}
+        data-line-numbers={showLineNumbers
+            ? "true"
+            : undefined}><code class={cn("relative px-4 font-mono text-sm", showLineNumbers && "grid")}><slot /></code></pre>
+</div>
+
+<style>
+    pre[data-line-numbers="true"] :global(.line) {
+        display: grid;
+        grid-template-columns: 2rem 1fr;
+        column-gap: 1rem;
+        counter-increment: line;
+        border-left: 1px solid var(--color-gray-800);
+        padding-left: 1rem;
+        margin-left: -1rem;
+    }
+    pre[data-line-numbers="true"] :global(.line)::before {
+        content: counter(line);
+        color: var(--color-gray-600);
+        text-align: right;
+    }
+    pre[data-line-numbers="true"] code {
+        counter-reset: line;
+    }
+</style>
+
+<script>
+    document
+        .querySelectorAll<HTMLButtonElement>(".copy-code-btn")
+        .forEach((button) => {
+            if (button.dataset.bound) return;
+            button.dataset.bound = "true";
+
+            const wrapper = button.closest(".group");
+            const codeEl = wrapper?.querySelector(".code-block-pre");
+            const copyIcon = button.querySelector(".copy-icon");
+            const checkIcon = button.querySelector(".check-icon");
+            const label = button.querySelector(".copy-label");
+
+            button.addEventListener("click", async () => {
+                const code = codeEl?.textContent || "";
+                await navigator.clipboard.writeText(code);
+
+                copyIcon?.classList.add("hidden");
+                checkIcon?.classList.remove("hidden");
+                if (label) label.textContent = "Copied!";
+                button.classList.add("bg-green-600/20", "text-green-400");
+                button.classList.remove(
+                    "bg-gray-700/50",
+                    "hover:bg-gray-700/75",
+                    "text-gray-400",
+                    "hover:text-gray-300",
+                );
+
+                setTimeout(() => {
+                    checkIcon?.classList.add("hidden");
+                    copyIcon?.classList.remove("hidden");
+                    if (label) label.textContent = "Copy";
+                    button.classList.remove(
+                        "bg-green-600/20",
+                        "text-green-400",
+                    );
+                    button.classList.add(
+                        "bg-gray-700/50",
+                        "hover:bg-gray-700/75",
+                        "text-gray-400",
+                        "hover:text-gray-300",
+                    );
+                }, 2000);
+            });
+        });
+</script>

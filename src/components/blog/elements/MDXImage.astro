@@ -1,0 +1,15 @@
+---
+import ZoomImage from "../ZoomImage.astro";
+
+interface Props {
+    src: string;
+    alt?: string;
+    title?: string;
+}
+
+const { src, alt, title } = Astro.props;
+---
+
+<div class="not-prose my-10">
+    <ZoomImage src={src} alt={alt || ''} caption={title || alt} />
+</div>

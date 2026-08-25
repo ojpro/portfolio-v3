@@ -1,0 +1,18 @@
+---
+interface Props {
+    id?: string;
+}
+
+let { id } = Astro.props;
+if (!id) {
+    const rendered = await Astro.slots.render('default');
+    id = rendered.replace(/<[^>]*>/g, '').trim().toLowerCase().replace(/\s+/g, '-');
+}
+---
+
+<h2
+    class="mt-14 mb-5 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 scroll-m-20 leading-snug"
+    id={id}
+>
+    <slot />
+</h2>

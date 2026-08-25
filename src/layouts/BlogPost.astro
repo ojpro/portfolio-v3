@@ -1,0 +1,188 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Base from "./Base.astro";
+import ReadingProgress from "../components/blog/ReadingProgress.astro";
+import ExpandableDescription from "../components/blog/ExpandableDescription.astro";
+import TableOfContent from "../components/blog/TableOfContent.astro";
+import PostNavigation from "../components/blog/PostNavigation.astro";
+import "@/styles/blog.css";
+
+interface NavPost {
+    title: string;
+    slug: string;
+}
+
+type Props = CollectionEntry<"blog">["data"] & {
+    readingTime: number;
+    prevPost: NavPost | null;
+    nextPost: NavPost | null;
+};
+
+const {
+    title,
+    description,
+    publishedAt,
+    updatedAt,
+    tags,
+    thumbnail,
+    lang,
+    rtl,
+    readingTime,
+    prevPost,
+    nextPost,
+} = Astro.props;
+
+const formattedDate = publishedAt.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+});
+---
+
+<Base
+    title={title}
+    description={description}
+    image={thumbnail?.src}
+    type="article"
+    publishedAt={publishedAt}
+    updatedAt={updatedAt}
+    tags={tags}
+    lang={lang}
+    rtl={rtl}
+>
+    <div class="relative min-h-screen px-4 md:px-8" dir={rtl ? "rtl" : "ltr"}>
+        <ReadingProgress />
+        <div class="xl:absolute mt-4 top-4 left-8">
+            <a
+                href="/blog"
+                class="inline-flex items-center gap-2 py-2 text-sm text-gray-600 dark:text-gray-300
+                           hover:text-gray-900 dark:hover:text-white transition-colors group"
+            >
+                <svg
+                    class="w-4 h-4 group-hover:-translate-x-1 transition-transform"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Posts
+            </a>
+        </div>
+        <article class="mx-auto max-w-3xl lg:max-w-4xl py-8 lg:pr-24">
+            <header class="mb-12">
+                <div
+                    class="mb-4 flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400"
+                >
+                    <div class="flex items-center gap-1">
+                        <svg
+                            class="h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect x="3" y="4" width="18" height="18" rx="2"
+                            ></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <time datetime={publishedAt.toISOString()}
+                            >{formattedDate}</time
+                        >
+                    </div>
+
+                    <div class="flex items-center gap-1">
+                        <svg
+                            class="h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>{readingTime} min read</span>
+                    </div>
+
+                    {
+                        tags && tags.length > 0 && (
+                            <div class="flex items-center gap-2">
+                                <svg
+                                    class="h-4 w-4"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="M20.59 13.41 11 3.83 3.83 11l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83Z" />
+                                    <circle
+                                        cx="7.5"
+                                        cy="7.5"
+                                        r="1.5"
+                                        fill="currentColor"
+                                        stroke="none"
+                                    />
+                                </svg>
+                                <div class="flex flex-wrap gap-2">
+                                    {tags.map((tag) => (
+                                        <span class="inline-flex items-center rounded-full bg-indigo-100 dark:bg-indigo-900/30 px-2.5 py-0.5 text-xs font-medium text-indigo-700 dark:text-indigo-300">
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>
+
+                <h1
+                    class="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 lg:text-5xl"
+                >
+                    {title}
+                </h1>
+
+                {
+                    description && (
+                        <ExpandableDescription description={description} />
+                    )
+                }
+            </header>
+
+            <div class="prose prose-lg dark:prose-invert prose-indigo mx-auto">
+                <slot />
+            </div>
+
+            <div
+                class="hidden xl:block lg:fixed lg:right-[max(2rem,calc(50%-45rem))]
+                              lg:top-15.25 lg:w-[16rem] lg:pt-20"
+            >
+                <div
+                    class="max-h-[calc(100vh-7.625rem)] overflow-y-auto
+                                  scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700
+                                  scrollbar-track-transparent"
+                >
+                    <TableOfContent />
+                </div>
+            </div>
+
+            <footer
+                class="mt-12 border-t border-gray-200 dark:border-gray-800 pt-8"
+            >
+                <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+            </footer>
+        </article>
+    </div>
+</Base>

@@ -1,0 +1,18 @@
+---
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+const isInline = !className;
+---
+
+{isInline ? (
+    <code class="rounded-md bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 font-mono text-sm text-indigo-600 dark:text-indigo-400">
+        <slot />
+    </code>
+) : (
+    <code class={className}>
+        <slot />
+    </code>
+)}

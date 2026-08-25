@@ -1,0 +1,77 @@
+---
+interface Props {
+    description: string;
+}
+
+const { description } = Astro.props;
+---
+
+<div class="relative expandable-description">
+    <div
+        class="relative bg-linear-to-r from-gray-50 to-white dark:from-gray-800/50 dark:to-gray-900/50
+                rounded-lg p-4 group cursor-pointer border border-gray-100 dark:border-gray-800 expandable-trigger"
+    >
+        <p
+            class="expandable-text text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-2 transition-all duration-300"
+        >
+            {description}
+        </p>
+
+        <button
+            type="button"
+            aria-label="Toggle description"
+            class="expandable-toggle absolute bottom-2 right-2 p-1.5 rounded-full
+                   bg-white dark:bg-gray-800 shadow-sm
+                   text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300
+                   transition-all duration-300 transform"
+        >
+            <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+
+        <div
+            class="absolute inset-x-0 bottom-0 h-12 bg-linear-to-t from-white dark:from-gray-900/50 to-transparent
+                    pointer-events-none opacity-60"
+        >
+        </div>
+        <div
+            class="absolute -inset-px rounded-lg bg-linear-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10
+                    opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        >
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggle(trigger: HTMLElement) {
+        const text = trigger.querySelector(".expandable-text");
+        const button = trigger.querySelector(".expandable-toggle");
+        text?.classList.toggle("line-clamp-2");
+        button?.classList.toggle("rotate-180");
+    }
+
+    document
+        .querySelectorAll<HTMLElement>(".expandable-trigger")
+        .forEach((trigger) => {
+            if (trigger.dataset.bound) return;
+            trigger.dataset.bound = "true";
+
+            trigger.addEventListener("click", () => toggle(trigger));
+
+            trigger
+                .querySelector(".expandable-toggle")
+                ?.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    toggle(trigger);
+                });
+        });
+</script>

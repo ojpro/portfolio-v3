@@ -1,0 +1,20 @@
+---
+import { cn } from "@/utils/utils";
+
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<code
+    class={cn(
+        "relative rounded-md bg-gray-100 dark:bg-gray-800/50 px-[0.4em] py-[0.2em]",
+        "font-mono text-sm text-gray-800 dark:text-gray-200",
+        "border border-gray-200 dark:border-gray-800",
+        className,
+    )}
+>
+    <slot />
+</code>

@@ -1,0 +1,60 @@
+---
+import Base from "@/layouts/Base.astro";
+import Button from "@/components/starwind/button/Button.astro";
+import Navbar from "@/components/home/Navbar.astro";
+---
+
+<Base bodyClass="relative">
+    <Navbar hidden />
+
+    <div class="bg-[#0D0C1B] w-screen h-screen relative">
+        <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center"
+        >
+            <img
+                src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWUxcTB3aWk1cnZvOTNmcTQzamZhNjFtbnE1bDYxamdqbGV2cnJhayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/bGgsc5mWoryfgKBx1u/giphy.gif"
+                alt="I am working on this page"
+                class="rounded-full w-xs"
+            />
+            <Button
+                id="rebuild-btn"
+                class="bg-white hover:bg-gray-100 text-black mt-8 hover:cursor-none"
+                >This page is being rebuilt</Button
+            >
+        </div>
+    </div>
+</Base>
+
+<script>
+    import { animate } from "animejs";
+
+    const btn = document.getElementById("rebuild-btn");
+    const navbar = document.querySelector(".navbar");
+    let isVisible = false;
+
+    btn?.addEventListener("click", () => {
+        if (!navbar) return;
+
+        if (!isVisible) {
+            navbar.classList.remove("pointer-events-none");
+            animate(navbar, {
+                opacity: [0, 1],
+                translateY: ["-2rem", "0rem"],
+                scale: [0.9, 1],
+                duration: 700,
+                ease: "outCubic",
+            });
+        } else {
+            animate(navbar, {
+                opacity: [1, 0],
+                translateY: ["0rem", "-2rem"],
+                scale: [1, 0.9],
+                duration: 700,
+                ease: "inCubic",
+                onComplete: () => navbar.classList.add("pointer-events-none"),
+            });
+        }
+
+        isVisible = !isVisible;
+    });
+</script>

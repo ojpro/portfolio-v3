@@ -1,0 +1,73 @@
+---
+interface NavPost {
+    title: string;
+    slug: string;
+}
+
+interface Props {
+    prevPost: NavPost | null;
+    nextPost: NavPost | null;
+}
+
+const { prevPost, nextPost } = Astro.props;
+---
+
+<nav class="flex items-center justify-between">
+    {
+        prevPost ? (
+            <a
+                href={`/blog/${prevPost.slug}`}
+                class="me-auto group flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
+            >
+                <svg
+                    class="h-4 w-4 transition-transform group-hover:-translate-x-1 rtl:rotate-180"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                </svg>
+                <div>
+                    <p class="text-xs text-gray-500 dark:text-gray-500">
+                        Previous
+                    </p>
+                    <p class="font-medium">{prevPost.title}</p>
+                </div>
+            </a>
+        ) : (
+            <div />
+        )
+    }
+
+    {
+        nextPost ? (
+            <a
+                href={`/blog/${nextPost.slug}`}
+                class="ms-auto group flex items-center gap-2 text-right text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
+            >
+                <div>
+                    <p class="text-xs text-gray-500 dark:text-gray-500">Next</p>
+                    <p class="font-medium">{nextPost.title}</p>
+                </div>
+                <svg
+                    class="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+            </a>
+        ) : (
+            <div />
+        )
+    }
+</nav>
