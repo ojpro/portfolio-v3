@@ -17,11 +17,13 @@ import { Image } from "astro:assets";
                 src={loadingImage}
                 alt="I am working on this page"
                 class="rounded-full w-xs"
+                loading="eager"
+                fetchpriority=high
             />
             <Button
                 id="rebuild-btn"
                 class="bg-white hover:bg-gray-100 text-black mt-8 hover:cursor-none"
-                >This page is being rebuilt.</Button
+                >This page is being rebuilt</Button
             >
         </div>
     </div>
